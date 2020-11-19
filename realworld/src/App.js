@@ -1,6 +1,11 @@
+import { BrowserRouter } from "react-router-dom";
+import Headers from "./layouts/Headers";
+
 function App() {
   return (
-    <div></div>
+    <BrowserRouter>
+      <Headers />
+    </BrowserRouter>
   );
 }
 
