@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import Button from '../components/Button';
 import Error from '../components/Error';
 import Input from '../components/Input';
+import * as utils from '../lib/utils';
+import messages from '../lib/messages.json';
 
 const JoinStyled = styled.div`
     width: 1140px;
@@ -40,16 +42,41 @@ const JoinStyled = styled.div`
 
 
 const Join = () => {
-    const [error, setError] = useState(false);
-    let username = '';
-    let email = '';
-    let password = '';
+    const [error, setError] = useState({});
+    const [user, setUser] = useState({
+        username: '',
+        email: '',
+        password: ''
+    });
 
-    const onChangeUsername = value => username = value;
-    const onChangeEmail = value => email = value;
-    const onChangePassword = value => password = value;
+    const onChangeParam = param => {
+        return value => {
+            setUser({
+                ...user,
+                [param]: value
+            })
+        }
+    }
     const onSubmit = (e) => {
         e.preventDefault();
+
+        if (!validate()) return;
+    }
+    const validate = () => {
+        const error = {};
+
+        for (const value in user) {
+            error[value] = !utils[`check${utils.capitalize(value)}Regex`](user[value]);
+        }
+
+        setError(error);
+    }
+    const createErrorMessage = () => {
+        return Object.entries(error).map(value => {
+            return value[1] ? (
+                <Error key={value[0]}>{messages.validate[value[0]]}</Error>
+            ) : ''
+        });
     }
     return (    
         <JoinStyled>
@@ -57,13 +84,18 @@ const Join = () => {
                 <h1>Sign Up</h1>
                 <Link to="/login">Have an account?</Link>
                 { 
-                    error ? 
-                        '' : 
-                        ''
+                    createErrorMessage()
                 }
-                <Input placeholder="Username" onChange={onChangeUsername}/>
-                <Input placeholder="Email" onChange={onChangeEmail}/>
-                <Input placeholder="Password" onChange={onChangePassword} />
+                {
+                    Object.keys(user).map(value => {
+                        return (
+                            <Input
+                                key={value} 
+                                placeholder={utils.capitalize(value)} 
+                                onChange={onChangeParam(value)}/>
+                        )
+                    })
+                }
                 <Button type="submit">회원가입</Button>
             </form>
         </JoinStyled>
