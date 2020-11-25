@@ -6,6 +6,7 @@ import Error from '../components/Error';
 import Input from '../components/Input';
 import * as utils from '../lib/utils';
 import messages from '../lib/messages.json';
+import { checkDuplicateUsername as checkUsername } from '../api/api';
 
 const JoinStyled = styled.div`
     width: 1140px;
@@ -44,10 +45,11 @@ const JoinStyled = styled.div`
 const Join = () => {
     const [error, setError] = useState({});
     const [user, setUser] = useState({
-        username: '',
-        email: '',
-        password: ''
+        username: false,
+        email: false,
+        password: false,
     });
+    const [isDuplicateUsername, setIsDuplicateUsername] = useState(false);
 
     const onChangeParam = param => {
         return value => {
@@ -60,23 +62,39 @@ const Join = () => {
     const onSubmit = (e) => {
         e.preventDefault();
 
-        if (!validate()) return;
+        if (validate()) return;
+        if (checkDuplicateUsername()) return;
     }
     const validate = () => {
         const error = {};
+        let result = false;
 
         for (const value in user) {
             error[value] = !utils[`check${utils.capitalize(value)}Regex`](user[value]);
+            result = result && error[value];
         }
 
         setError(error);
+
+        return result;
     }
     const createErrorMessage = () => {
-        return Object.entries(error).map(value => {
+        var result = Object.entries(error).map(value => {
             return value[1] ? (
                 <Error key={value[0]}>{messages.validate[value[0]]}</Error>
             ) : ''
-        });
+        })
+
+        if (isDuplicateUsername) {
+            result.push(<Error key='isDuplicateUsername'>{messages.validate.isDuplicateUsername}</Error>);
+        }
+
+        return result;
+    }
+    const checkDuplicateUsername = async () => {
+        const result = await checkUsername(user.username);
+        setIsDuplicateUsername(result);
+        return result;
     }
     return (    
         <JoinStyled>
