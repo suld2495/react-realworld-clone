@@ -1,14 +1,16 @@
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import LoginContainer from "./containers/LoginContainer";
 import Headers from "./layouts/Headers";
 
 function App() {
-  return (
-    <BrowserRouter>
-      <Headers />
-      <Route path="/login" component={LoginContainer} />
-    </BrowserRouter>
-  );
+    return ( 
+        <BrowserRouter>
+            <Headers />
+            <Switch>
+                <Route path = "/login" component = { LoginContainer }/> 
+            </Switch > 
+        </BrowserRouter> 
+    );
 }
 
 export default App;
