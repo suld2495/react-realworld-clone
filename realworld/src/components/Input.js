@@ -13,14 +13,14 @@ const InputStyled = styled.input`
 
 const Input = ({ placeholder = '', onChange }) => {
     const [value, setValue] = useState('');
-
+    const type = placeholder === 'Password' ? placeholder : 'text';
     const handlerChange = (e) => {
         setValue(e.target.value);
-        onChange(value);
+        onChange(e.target.value);
     }
 
     return (
-        <InputStyled placeholder={placeholder} onChange={handlerChange}/>
+        <InputStyled type={type} placeholder={placeholder} onChange={handlerChange}/>
     )
 };
 
