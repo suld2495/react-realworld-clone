@@ -14,8 +14,13 @@ class PouchDomain {
         })
     }
 
-    getDocs() {
-        return this.db.get(this.dbName);
+    async getDocs() {
+        try {
+            const doc = await this.db.get(this.dbName);
+            return doc;
+        } catch (e) {
+            return null;
+        }
     }
 
     async addData(data) {
