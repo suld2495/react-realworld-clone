@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../components/Button';
+import Error from '../components/Error';
 import Input from '../components/Input';
 
 const LoginStyled = styled.div`
@@ -37,13 +38,15 @@ const LoginStyled = styled.div`
     }
 `;
 
-const Login = () => {
-    const onChange = () => {
+const Login = ({ error, login }) => {
+    let email = '';
+    let password = '';
 
-    }
+    const onChangeEmail = value => email = value;
+    const onChangePassword = value => password = value;
     const onSubmit = (e) => {
-        console.log('안녕?');
         e.preventDefault();
+        login(email, password);
     }
     
     return (
@@ -51,8 +54,13 @@ const Login = () => {
             <form className="container" onSubmit={onSubmit}>
                 <h1>Sign In</h1>
                 <Link to="/join">Need an account?</Link>
-                <Input placeholder="Email" onChange={onChange}/>
-                <Input placeholder="Password" onChange={onChange} />
+                { 
+                    error ? 
+                        <Error>이메일 또는 패스워드를 확인하세요</Error> : 
+                        ''
+                }
+                <Input placeholder="Email" onChange={onChangeEmail}/>
+                <Input placeholder="Password" onChange={onChangePassword} />
                 <Button type="submit">로그인</Button>
             </form>
         </LoginStyled>

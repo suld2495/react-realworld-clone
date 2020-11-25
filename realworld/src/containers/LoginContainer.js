@@ -1,18 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Login from '../pages/Login';
+import { login } from '../modules/login';
 
-const LoginContainer = () => {
+const LoginContainer = ({ error, login }) => {
     return (
-        <Login />
+        <Login error={error} login={login} />
     );
 };
 
 export default connect(
-    state => ({
-
-    }), 
+    state => ({ 
+        error: state.login.error 
+    }),
     {
-        
+        login
     }
 )(LoginContainer);
