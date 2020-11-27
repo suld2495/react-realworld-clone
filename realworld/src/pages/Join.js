@@ -45,9 +45,9 @@ const JoinStyled = styled.div`
 const Join = () => {
     const [error, setError] = useState({});
     const [user, setUser] = useState({
-        username: false,
-        email: false,
-        password: false,
+        username: '',
+        email: '',
+        password: '',
     });
     const [isDuplicateUsername, setIsDuplicateUsername] = useState(false);
 
