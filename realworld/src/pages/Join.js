@@ -6,7 +6,7 @@ import Error from '../components/Error';
 import Input from '../components/Input';
 import * as utils from '../lib/utils';
 import messages from '../lib/messages.json';
-import { checkDuplicateUsername as checkUsername } from '../api/api';
+import { checkDuplicateUsername as checkUsername, addUser } from '../api/api';
 
 const JoinStyled = styled.div`
     width: 1140px;
@@ -42,7 +42,7 @@ const JoinStyled = styled.div`
 `;
 
 
-const Join = () => {
+const Join = ({ history }) => {
     const [error, setError] = useState({});
     const [user, setUser] = useState({
         username: '',
@@ -59,11 +59,18 @@ const Join = () => {
             })
         }
     }
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
+        let result = true;
         e.preventDefault();
 
         if (validate()) return;
-        if (checkDuplicateUsername()) return;
+        if ((result = await checkDuplicateUsername())) return;
+
+        await addUser(user);
+
+        alert('회원가입이 완료되었습니다.');
+
+        history.push('/login');
     }
     const validate = () => {
         const error = {};

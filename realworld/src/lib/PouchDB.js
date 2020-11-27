@@ -14,10 +14,9 @@ class PouchDomain {
         })
     }
 
-    async getDocs() {
+    async getDocs(id) {
         try {
-            const doc = await this.db.get(this.dbName);
-            return doc;
+            return await this.db.get(id);
         } catch (e) {
             return null;
         }
@@ -25,7 +24,7 @@ class PouchDomain {
 
     async addData(data) {
         try {
-            const docs = await this.getDocs();
+            const docs = await this.getDocs(data._id);
             data = { ...data, _rev: docs._rev };
         } catch (e) {
 
