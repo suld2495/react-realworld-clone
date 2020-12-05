@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { call, put, takeLatest } from 'redux-saga/effects'
+import { call, put, takeEvery } from 'redux-saga/effects'
 import * as api from '../api/api';
 
 const LOGIN_REQUEST = 'login/LOGIN_REQUEST';
@@ -13,19 +13,19 @@ function* getLoginSaga(action) {
         const result = yield call(api.login, action.payload);
         yield put({
             type: LOGIN_SUCCESS,
-            payload: { ...result.data }
-        })
+            payload: { isLogin: result, error: !result }
+        });
     } catch (e) {
         yield put({
             type: LOGIN_FAILURE,
-            payload: { isLogin: false, error: true},
+            payload: { isLogin: false, error: true },
             error: true
         });
     }
 }
 
 export function* loginSaga() {
-    yield takeLatest(LOGIN_REQUEST, getLoginSaga);
+    yield takeEvery(LOGIN_REQUEST, getLoginSaga);
 }
 
 const initialState = { isLogin: false, error: false };
