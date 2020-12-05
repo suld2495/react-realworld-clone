@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../components/Button';
@@ -38,9 +38,15 @@ const LoginStyled = styled.div`
     }
 `;
 
-const Login = ({ error, login }) => {
+const Login = ({ error, login, history, isLogin }) => {
     let email = '';
     let password = '';
+
+    useEffect(() => {
+        if (isLogin) {
+            history.push('/');
+        }
+    }, [isLogin])
 
     const onChangeEmail = value => email = value;
     const onChangePassword = value => password = value;
