@@ -21,13 +21,19 @@ const Nav = styled.nav`
     }
 `;
 
-const Headers = () => {
+const Headers = ({ isLogin }) => {
     return (
         <Nav>
             <Link to="/" className="logo">REALWORLD</Link>
             <ul>
                 <Link to="/">Home</Link>
-                <Link to="/login">로그인</Link>
+                {
+                    isLogin ? 
+                    <Link to="/logout">로그아웃</Link> :
+                    <Link to="/login">로그인</Link>
+                }
+                
+                
                 <Link to="/join">회원가입</Link>
             </ul>
         </Nav>
