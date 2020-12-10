@@ -42,12 +42,6 @@ const Login = ({ error, login, history, isLogin }) => {
     let email = '';
     let password = '';
 
-    useEffect(() => {
-        if (isLogin) {
-            history.push('/');
-        }
-    }, [isLogin])
-
     const onChangeEmail = value => email = value;
     const onChangePassword = value => password = value;
     const onSubmit = (e) => {

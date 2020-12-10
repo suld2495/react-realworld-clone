@@ -21,7 +21,9 @@ import { Route, Switch } from 'react-router-dom';
 export const history = createHistory();
 
 const logger = createLogger();
-const sagaMiddleware = createSagaMiddleware();
+const sagaMiddleware = createSagaMiddleware({
+  context: { history }
+});
 const store = createStore(
   rootReducer, 
   composeWithDevTools(applyMiddleware(logger, sagaMiddleware))

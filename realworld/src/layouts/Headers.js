@@ -14,27 +14,37 @@ const Nav = styled.nav`
         color: #3d8b3d;
         font-weight: bold;
     }
-    ul a {
+    ul {
+        display: flex;
+    }
+    ul a, ul span {
         color: rgba(0,0,0,.6);
         font-size: 0.9rem;
         margin-left: 1rem;
+        cursor: pointer;
     }
 `;
 
-const Headers = ({ isLogin }) => {
+const Headers = ({ isLogin, logout }) => {
+    const onClick = () => logout();
+
     return (
         <Nav>
             <Link to="/" className="logo">REALWORLD</Link>
             <ul>
-                <Link to="/">Home</Link>
-                {
-                    isLogin ? 
-                    <Link to="/logout">로그아웃</Link> :
-                    <Link to="/login">로그인</Link>
-                }
-                
-                
-                <Link to="/join">회원가입</Link>
+                <li>
+                    <Link to="/">Home</Link>
+                </li>
+                <li>
+                    {
+                        isLogin ? 
+                        <span onClick={onClick}>로그아웃</span> :
+                        <Link to="/login">로그인</Link>
+                    }
+                </li>
+                <li>
+                    <Link to="/join">회원가입</Link>
+                </li>
             </ul>
         </Nav>
     )
