@@ -4,10 +4,18 @@ const checkPasswordRegex = param => /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*
 const checkEmailRegex = param => /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i.test(param);
 const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
 
+const guid = () => {
+    function s4() {
+      return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+    }
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+  }
+
 export {
     isEmptyObject,
     checkUsernameRegex,
     checkPasswordRegex,
     checkEmailRegex,
-    capitalize
+    capitalize,
+    guid,
 }

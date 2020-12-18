@@ -18,6 +18,8 @@ import createHistory from 'history/createBrowserHistory';
 
 import { Route, Switch } from 'react-router-dom';
 
+import { localStorageMiddleware } from './middleware';
+
 export const history = createHistory();
 
 const logger = createLogger();
@@ -26,7 +28,7 @@ const sagaMiddleware = createSagaMiddleware({
 });
 const store = createStore(
   rootReducer, 
-  composeWithDevTools(applyMiddleware(logger, sagaMiddleware))
+  composeWithDevTools(applyMiddleware(logger, sagaMiddleware, localStorageMiddleware))
 );
 
 sagaMiddleware.run(rootSaga);
