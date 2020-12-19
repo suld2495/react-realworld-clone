@@ -10,10 +10,13 @@ export const appLoad = createAction(APP_LOAD, (token) => ({ token }));
 
 function* currentUserSaga(action) {
     const result = yield call(currentUser, action.payload.token);
-    yield put({
-        type: LOGIN_SUCCESS,
-        payload: { isLogin: true, error: false, user: result }
-    });
+
+    if (result) {
+        yield put({
+            type: LOGIN_SUCCESS,
+            payload: { isLogin: true, error: false, user: result }
+        });
+    }
 }
 
 export function* appSaga() {
