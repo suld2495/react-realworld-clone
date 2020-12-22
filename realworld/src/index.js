@@ -6,6 +6,10 @@ import reportWebVitals from './reportWebVitals';
 
 import 'reset-css';
 
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import { faAngleDoubleLeft, faAngleLeft, faAngleRight, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
+
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import rootReducer, { rootSaga } from './modules';
@@ -32,6 +36,8 @@ const store = createStore(
 );
 
 sagaMiddleware.run(rootSaga);
+
+library.add(fab, faAngleDoubleLeft, faAngleLeft, faAngleRight, faAngleDoubleRight);
 
 ReactDOM.render(
   <Provider store={store}>

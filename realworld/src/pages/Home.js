@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { currentUser } from '../api/api';
 import BoardList from '../components/BoardList';
 import Paging from '../components/Paging';
 
@@ -24,17 +25,40 @@ const HomeStyled = styled.div`
     .banner * {
         width: 100%;
     }
+    .tab {
+        width: 675px;
+        margin: 0 auto;
+    }
+    .tab li {
+        color: #5cb85c;
+        display: inline-block;
+        padding: 20px;
+        border-bottom: 2px solid #5cb85c;
+    }
 `;
 
-const Home = ({ articles, total, getBoard }) => {
+const Home = ({ articles, total, isLogin, getBoard }) => {
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        getBoard();
+        getBoard({
+            page: 1,
+            all: true
+        });
     }, [getBoard]);
 
-    const onClick = () => {
+    const onClick = (currentPage) => {
+        setPage(currentPage);
+        getBoard({
+            page: currentPage
+        })
+    }
 
+    const getGlobalFeed = () => {
+        getBoard({
+            page: 1,
+            all: true
+        });
     }
 
     return (
@@ -42,6 +66,14 @@ const Home = ({ articles, total, getBoard }) => {
             <div className="banner">
                 <h1>conduit</h1>
                 <p>A place to share your knowledge.</p>
+            </div>
+            <div className="tab">
+                <ul>
+                    <li onClick={getGlobalFeed}>Global Feed</li>
+                    {
+                        isLogin ? <li>your feed</li> : ''
+                    }
+                </ul>
             </div>
             <BoardList articles={articles} />
             <Paging 
