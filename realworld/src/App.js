@@ -6,6 +6,7 @@ import Headers from "./layouts/Headers";
 
 import LoginContainer from "./containers/LoginContainer";
 import HomeContainer from './containers/HomeContainer';
+import BoardWriteContainer from './containers/BoardWriteContainer';
 import Join from "./pages/Join";
 
 import { logout } from './modules/login';
@@ -31,6 +32,7 @@ function App({ isLogin, logout, appLoad }) {
                 <Route path="/" component={ HomeContainer } exact />
                 <Route path = "/login" component={ LoginContainer }/> 
                 <Route path = "/join" component={ Join }/> 
+                <Route path = "/write" component={ BoardWriteContainer }/> 
             </Switch > 
         </>
     );
