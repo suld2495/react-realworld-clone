@@ -37,6 +37,13 @@ const Headers = ({ isLogin, logout }) => {
                 </li>
                 <li>
                     {
+                        isLogin ?
+                        <Link to="/write">New Post</Link> : 
+                        ''
+                    }
+                </li>
+                <li>
+                    {
                         isLogin ? 
                         <span onClick={onClick}>로그아웃</span> :
                         <Link to="/login">로그인</Link>
