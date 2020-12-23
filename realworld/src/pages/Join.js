@@ -78,7 +78,7 @@ const Join = ({ history }) => {
 
         for (const value in user) {
             error[value] = !utils[`check${utils.capitalize(value)}Regex`](user[value]);
-            result = result && error[value];
+            result = result || error[value];
         }
 
         setError(error);
