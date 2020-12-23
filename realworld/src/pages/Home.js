@@ -32,18 +32,23 @@ const HomeStyled = styled.div`
         color: #5cb85c;
         display: inline-block;
         padding: 20px;
+        cursor: pointer;
+    }
+    .tab li.active {
         border-bottom: 2px solid #5cb85c;
     }
 `;
 
 const Home = ({ articles, total, user, getBoard, updateFavorite }) => {
     const [page, setPage] = useState(1);
+    const [all, setAll] = useState(false);
 
     useEffect(() => {
         getBoard({
             page: 1,
             all: true
         });
+        setAll(true);
     }, [user]);
 
     const onClick = (currentPage) => {
@@ -58,6 +63,15 @@ const Home = ({ articles, total, user, getBoard, updateFavorite }) => {
             page: 1,
             all: true
         });
+        setAll(true);
+    }
+
+    const getYourFeed = () => {
+        getBoard({
+            page: 1,
+            all: false
+        });
+        setAll(false);
     }
 
     return (
@@ -68,9 +82,9 @@ const Home = ({ articles, total, user, getBoard, updateFavorite }) => {
             </div>
             <div className="tab">
                 <ul>
-                    <li onClick={getGlobalFeed}>Global Feed</li>
+                    <li className={`${all ? 'active': ''}`} onClick={getGlobalFeed}>Global Feed</li>
                     {
-                        user ? <li>your feed</li> : ''
+                        user ? <li className={`${!all ? 'active': ''}`} onClick={getYourFeed}>Your Feed</li> : ''
                     }
                 </ul>
             </div>
