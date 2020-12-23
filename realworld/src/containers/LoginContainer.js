@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Login from '../pages/Login';
-import { login } from '../modules/login';
+import { login, loginLoad } from '../modules/login';
 
-const LoginContainer = ({ error, login, history, isLogin }) => {
+const LoginContainer = ({ error, login, loginLoad }) => {
     return (
         <Login 
             error={error} 
             login={login} 
-            history={history}
-            isLogin={isLogin} />
+            loginLoad={loginLoad}
+        />
     );
 };
 
@@ -19,6 +19,7 @@ export default connect(
         isLogin: state.login.isLogin 
     }),
     {
-        login
+        login,
+        loginLoad
     }
 )(LoginContainer);
