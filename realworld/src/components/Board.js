@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '../../node_modules/@fortawesome/react-fontawesome/index';
 
 const BoardStyled = styled.div`
     border-top: 1px solid #dfdfdf;
@@ -51,9 +52,35 @@ const BoardStyled = styled.div`
         font-size: 13px;
         color: #acacac;
     }
+    .favorite {
+        border: 1px solid #5cb85c;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        padding: 0 4px;
+        border-radius: 4px;
+        color: #5cb85c;
+        cursor: pointer;
+    }
+    .favorite.active {
+        background: #5cb85c;
+        border: none;
+        color: #fff;
+    }
+    .favorite-count {
+        margin-left: 5px;
+        font-size: 13px;
+    }
 `;
 
-const Board = ({ article }) => {
+const Board = ({ article, user, updateFavorite }) => {
+    const handleUpdateFavorite = () => {
+        if (user) {
+            updateFavorite(article.id);
+        } else {
+            alert('로그인 후 이용가능 합니다.');
+        }
+    }
     return (
         <BoardStyled>
             <div className="article-meta">
@@ -64,7 +91,10 @@ const Board = ({ article }) => {
                         <p className="created">{article.createdAt}</p>
                     </div>
                 </div>
-                <div className="favorite"></div>
+                <div className={`favorite ${user && article.favorites.includes(user.email) ? 'active' : ''}`} onClick={handleUpdateFavorite}>
+                    <FontAwesomeIcon icon="heart"/>
+                    <span className="favorite-count">{article.favoriteCount}</span>
+                </div>
             </div>
             <Link className="contents" to="/">
                 <h1 className="title">{article.title}</h1>

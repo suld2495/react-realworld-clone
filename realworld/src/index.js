@@ -8,7 +8,7 @@ import 'reset-css';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fab } from '@fortawesome/free-brands-svg-icons'
-import { faAngleDoubleLeft, faAngleLeft, faAngleRight, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDoubleLeft, faAngleLeft, faAngleRight, faAngleDoubleRight, faHeart } from '@fortawesome/free-solid-svg-icons'
 
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
@@ -37,7 +37,7 @@ const store = createStore(
 
 sagaMiddleware.run(rootSaga);
 
-library.add(fab, faAngleDoubleLeft, faAngleLeft, faAngleRight, faAngleDoubleRight);
+library.add(fab, faAngleDoubleLeft, faAngleLeft, faAngleRight, faAngleDoubleRight, faHeart);
 
 ReactDOM.render(
   <Provider store={store}>

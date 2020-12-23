@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { currentUser } from '../api/api';
 import BoardList from '../components/BoardList';
 import Paging from '../components/Paging';
 
@@ -37,7 +36,7 @@ const HomeStyled = styled.div`
     }
 `;
 
-const Home = ({ articles, total, isLogin, getBoard }) => {
+const Home = ({ articles, total, user, getBoard, updateFavorite }) => {
     const [page, setPage] = useState(1);
 
     useEffect(() => {
@@ -45,7 +44,7 @@ const Home = ({ articles, total, isLogin, getBoard }) => {
             page: 1,
             all: true
         });
-    }, [getBoard]);
+    }, [user]);
 
     const onClick = (currentPage) => {
         setPage(currentPage);
@@ -71,11 +70,11 @@ const Home = ({ articles, total, isLogin, getBoard }) => {
                 <ul>
                     <li onClick={getGlobalFeed}>Global Feed</li>
                     {
-                        isLogin ? <li>your feed</li> : ''
+                        user ? <li>your feed</li> : ''
                     }
                 </ul>
             </div>
-            <BoardList articles={articles} />
+            <BoardList articles={articles} user={user} updateFavorite={updateFavorite}/>
             <Paging 
                 total={total} 
                 onClick={onClick}
