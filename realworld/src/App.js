@@ -14,7 +14,7 @@ import { logout } from './modules/login';
 import api from './api/api';
 import { appLoad } from './modules/app';
 
-function App({ isLogin, logout, appLoad }) {
+function App({ isLogin, logout, appLoad, user }) {
     useEffect(() => {
         const token = window.localStorage.getItem('jwt');
 
@@ -27,7 +27,7 @@ function App({ isLogin, logout, appLoad }) {
     
     return ( 
         <>
-            <Headers isLogin={isLogin} logout={logout} />
+            <Headers isLogin={isLogin} logout={logout} user={user} />
             <Switch>
                 <Route path="/" component={ HomeContainer } exact />
                 <Route path = "/login" component={ LoginContainer }/> 
@@ -40,7 +40,8 @@ function App({ isLogin, logout, appLoad }) {
 
 export default connect(
     state => ({ 
-        isLogin: state.login.isLogin 
+        isLogin: state.login.isLogin,
+        user: state.login.user 
     }),
     {
         logout,

@@ -25,7 +25,7 @@ const Nav = styled.nav`
     }
 `;
 
-const Headers = ({ isLogin, logout }) => {
+const Headers = ({ isLogin, logout, user }) => {
     const onClick = () => logout();
 
     return (
@@ -45,12 +45,16 @@ const Headers = ({ isLogin, logout }) => {
                 <li>
                     {
                         isLogin ? 
-                        <span onClick={onClick}>로그아웃</span> :
+                        <Link to="/mypage">{user.email}</Link> :
                         <Link to="/login">로그인</Link>
                     }
                 </li>
                 <li>
-                    <Link to="/join">회원가입</Link>
+                    {
+                        isLogin ?
+                        <span onClick={onClick}>로그아웃</span> :
+                        <Link to="/join">회원가입</Link>
+                    }
                 </li>
             </ul>
         </Nav>
