@@ -9,6 +9,8 @@ const LOGIN_FAILURE = 'login/LOGIN_FAILURE';
 const LOGOUT_REQUEST = 'login/LOGOUT_REQUEST';
 const LOGOUT_SUCCESS = 'login/LOGOUT_SUCCESS';
 
+const LOGIN_LOAD = 'login/LOGIN_LOAD';
+
 const GO_TO_HOME = 'login/GO_TO_HOME';
 
 export { 
@@ -18,6 +20,8 @@ export {
 
 export const login = createAction(LOGIN_REQUEST, (email, password) => ({ email, password }));
 export const logout = createAction(LOGOUT_SUCCESS, (email, password) => ({ email, password }));
+export const loginLoad = createAction(LOGIN_LOAD);
+
 
 function* getLoginSaga(action) {
     try {
@@ -71,6 +75,7 @@ const loginActions = handleActions(
         [LOGIN_SUCCESS]: (state, action) => ({ ...state, ...action.payload, token: action.payload.token || null }),
         [LOGIN_FAILURE]: (state, action) => ({ ...state, ...action.payload }),
         [LOGOUT_SUCCESS]: state => ({ ...state, isLogin: false }),
+        [LOGIN_LOAD]: state => ({ ...state, error: false }),
     },
     initialState,
 )

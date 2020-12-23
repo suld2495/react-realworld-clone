@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../components/Button';
@@ -38,12 +38,16 @@ const LoginStyled = styled.div`
     }
 `;
 
-const Login = ({ error, login, history, isLogin }) => {
-    let email = '';
-    let password = '';
+const Login = ({ error, login, loginLoad }) => {
+    let [email, setEmail] = useState('');
+    let [password, setPassword] = useState('');
 
-    const onChangeEmail = value => email = value;
-    const onChangePassword = value => password = value;
+    useEffect(() => {
+        loginLoad();
+    }, []);
+
+    const onChangeEmail = value => setEmail(value);
+    const onChangePassword = value => setPassword(value);
     const onSubmit = (e) => {
         e.preventDefault();
         login(email, password);
