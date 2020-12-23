@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { call, put, takeEvery, getContext } from 'redux-saga/effects'
+import { call, put, takeEvery, getContext, select } from 'redux-saga/effects'
 import * as api from '../api/api';
 
 const FETCH_BOARD_REQUEST = 'board/FETCH_BOARD_REQUEST';
@@ -12,11 +12,14 @@ const UPDATE_BOARD_FAILURE = 'board/UPDATE_BOARD_FAILURE';
 
 const EDIT_BOARD_FIELD_REQUEST = 'board/EDIT_BOARD_FIELD_REQUEST';
 
+const UPDATE_FAVORITE = 'board/UPDATE_FAVORITE';
+
 const GO_TO_ARTICLE = 'board/GO_TO_ARTICLE';
 
 export const getBoard = createAction(FETCH_BOARD_REQUEST, option => option);
 export const updateBoard = createAction(UPDATE_BOARD_REQUEST, article => article);
 export const editBoardField = createAction(EDIT_BOARD_FIELD_REQUEST, (key, value) => ({key, value}));
+export const updateFavorite = createAction(UPDATE_FAVORITE, id => ({ id }));
 
 function* getBoardSaga(action) {
     try {
@@ -41,7 +44,8 @@ function* goToArticleSaga(action) {
 
 function* updateBoardSaga(action) {
     try {
-        const id = yield call(api.updateBoard, action.payload);
+        const author = yield select(state => state.login.user);
+        const id = yield call(api.updateBoard, { ...action.payload, author });
         yield put({
             type: UPDATE_BOARD_SUCCESS,
         })
@@ -57,10 +61,26 @@ function* updateBoardSaga(action) {
     }
 }
 
+function* updateFavoriteSaga(action) {
+    
+    try {
+        const user = yield select(state => state.login.user);
+        const option = yield select(state => state.board.option)
+        yield call(api.updateFavorite, { user, id: action.payload.id });
+        yield put({
+            type: FETCH_BOARD_REQUEST,
+            payload: { ...option }
+        })
+    } catch (e) {
+
+    }
+}
+
 export function* boardSaga() {
     yield takeEvery(FETCH_BOARD_REQUEST, getBoardSaga);
     yield takeEvery(UPDATE_BOARD_REQUEST, updateBoardSaga);
     yield takeEvery(GO_TO_ARTICLE, goToArticleSaga);
+    yield takeEvery(UPDATE_FAVORITE, updateFavoriteSaga);
 };
 
 const initialState = { 
@@ -98,7 +118,7 @@ const boardActions = handleActions(
         [EDIT_BOARD_FIELD_REQUEST]: (state, action) => ({ ...state, article: {
             ...state.article,
             [action.payload.key]: action.payload.value
-        }})
+        }}),
     },
     initialState
 );

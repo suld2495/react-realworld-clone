@@ -1,15 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Home from '../pages/Home';
-import { getBoard } from '../modules/board';
+import { getBoard, updateFavorite } from '../modules/board';
 
-const HomeContainer = ({ articles, total, isLogin, getBoard }) => {
+const HomeContainer = ({ articles, total, user, getBoard, updateFavorite }) => {
     return (
         <Home 
             getBoard={getBoard}
             articles={articles}
             total={total}
-            isLogin={isLogin}
+            user={user}
+            updateFavorite={updateFavorite}
         />
     );
 };
@@ -18,9 +19,10 @@ export default connect(
     state => ({
         articles: state.board.articles,
         total: state.board.total,
-        isLogin: state.login.isLogin,
+        user: state.login.user,
     }),
     {
-        getBoard
+        getBoard,
+        updateFavorite
     }
 )(HomeContainer);
