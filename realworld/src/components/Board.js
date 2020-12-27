@@ -96,7 +96,7 @@ const Board = ({ article, user, updateFavorite }) => {
                     <span className="favorite-count">{article.favoriteCount}</span>
                 </div>
             </div>
-            <Link className="contents" to="/">
+            <Link className="contents" to={`/article/${article.id}`}>
                 <h1 className="title">{article.title}</h1>
                 <p className="body">{article.body}</p>
                 <span>Read more...</span>
