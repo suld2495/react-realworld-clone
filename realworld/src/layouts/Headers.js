@@ -45,7 +45,7 @@ const Headers = ({ isLogin, logout, user }) => {
                 <li>
                     {
                         isLogin ? 
-                        <Link to="/mypage">{user.email}</Link> :
+                        <Link to={`/mypage/${user.email}`}>{user.email}</Link> :
                         <Link to="/login">로그인</Link>
                     }
                 </li>
