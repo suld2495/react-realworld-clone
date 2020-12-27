@@ -1,4 +1,4 @@
-import { createAction, handleActions } from 'redux-actions';
+import { createAction, createActions, handleActions } from 'redux-actions';
 import { call, put, takeEvery, getContext, select } from 'redux-saga/effects'
 import * as api from '../api/api';
 import { GO_TO_HOME } from './login';
@@ -22,12 +22,16 @@ const GO_TO_ARTICLE = 'board/GO_TO_ARTICLE';
 
 const BOARD_LOAD = 'board/BOARD_LOAD';
 
+const FETCH_USER_INFO_REQUEST = 'board/FETCH_USER_INFO_REQUEST';
+const FETCH_USER_INFO_SUCCESS = 'board/FETCH_USER_INFO_SUCCESS';
+
 export const getBoard = createAction(FETCH_BOARD_REQUEST, option => option);
 export const getBoardInfo = createAction(FETCH_BOARD_INFO_REQUEST, id => id);
 export const updateBoard = createAction(UPDATE_BOARD_REQUEST, article => article);
 export const editBoardField = createAction(EDIT_BOARD_FIELD_REQUEST, (key, value) => ({key, value}));
 export const updateFavorite = createAction(UPDATE_FAVORITE, id => ({ id }));
 export const boardLoad = createAction(BOARD_LOAD);
+export const getUserInfo = createAction(FETCH_USER_INFO_REQUEST, email => ({ email }));
 
 function* getBoardSaga(action) {
     try {
@@ -104,12 +108,28 @@ function* updateFavoriteSaga(action) {
     }
 }
 
+function* getUserInfoSaga(action) {
+    try {
+        const user = yield call(api.getUserInfo, action.payload.email);
+        yield put({
+            type: FETCH_USER_INFO_SUCCESS,
+            payload: { user }
+        })
+    } catch (e) {
+        alert('잘못 된 경로입니다.');
+        yield put({
+            type: GO_TO_HOME
+        })
+    }
+}
+
 export function* boardSaga() {
     yield takeEvery(FETCH_BOARD_REQUEST, getBoardSaga);
     yield takeEvery(UPDATE_BOARD_REQUEST, updateBoardSaga);
     yield takeEvery(GO_TO_ARTICLE, goToArticleSaga);
     yield takeEvery(UPDATE_FAVORITE, updateFavoriteSaga);
     yield takeEvery(FETCH_BOARD_INFO_REQUEST, getBoardInfoSaga);
+    yield takeEvery(FETCH_USER_INFO_REQUEST, getUserInfoSaga);
 };
 
 const initialState = { 
@@ -122,6 +142,9 @@ const initialState = {
         content: '',
         tag: '',
         author: {}
+    },
+    user: {
+        
     }
 };
 
@@ -160,7 +183,8 @@ const boardActions = handleActions(
                 tag: '',
                 author: {}
             }
-        })
+        }),
+        [FETCH_USER_INFO_SUCCESS]: (state, action) => ({ ...state, user: action.payload.user })
     },
     initialState
 );

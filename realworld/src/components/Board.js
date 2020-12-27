@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '../../node_modules/@fortawesome/react-fontawesome/index';
+import Smiley from '../assets/images/smiley-cyrus.jpg';
 
 const BoardStyled = styled.div`
     border-top: 1px solid #dfdfdf;
@@ -85,7 +86,7 @@ const Board = ({ article, user, updateFavorite }) => {
         <BoardStyled>
             <div className="article-meta">
                 <div className="profile">
-                    <div><img src={article.author.image} alt="" /></div>
+                    <div><img src={article.author.image || Smiley} alt="" /></div>
                     <div className="info">
                         <Link className="username" to={`/mypage/${article.author.email}`}>{article.author.username}</Link>
                         <p className="created">{article.createdAt}</p>

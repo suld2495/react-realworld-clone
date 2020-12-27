@@ -36,7 +36,7 @@ function App({ isLogin, logout, appLoad, user }) {
                 <Route path = "/join" component={ Join }/> 
                 <Route path = "/write" component={ BoardWriteContainer }/> 
                 <Route path = "/article/:id" component={ ArticleContainer }/> 
-                <Route path = "/mypage/:id" component={ MypageContainer }/> 
+                <Route path = "/mypage/:email" component={ MypageContainer }/> 
             </Switch > 
         </>
     );
