@@ -1,6 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
 import { call, put, takeEvery, getContext, select } from 'redux-saga/effects'
 import * as api from '../api/api';
+import { GO_TO_HOME } from './login';
 
 const FETCH_BOARD_REQUEST = 'board/FETCH_BOARD_REQUEST';
 const FETCH_BOARD_SUCCESS = 'board/FETCH_BOARD_SUCCESS';
@@ -10,6 +11,9 @@ const UPDATE_BOARD_REQUEST = 'board/UPDATE_BOARD_REQUEST';
 const UPDATE_BOARD_SUCCESS = 'board/UPDATE_BOARD_SUCCESS';
 const UPDATE_BOARD_FAILURE = 'board/UPDATE_BOARD_FAILURE';
 
+const FETCH_BOARD_INFO_REQUEST = 'board/FETCH_BOARD_INFO_REQUEST';
+const FETCH_BOARD_INFO_SUCCESS = 'board/FETCH_BOARD_INFO_SUCCESS';
+
 const EDIT_BOARD_FIELD_REQUEST = 'board/EDIT_BOARD_FIELD_REQUEST';
 
 const UPDATE_FAVORITE = 'board/UPDATE_FAVORITE';
@@ -17,6 +21,7 @@ const UPDATE_FAVORITE = 'board/UPDATE_FAVORITE';
 const GO_TO_ARTICLE = 'board/GO_TO_ARTICLE';
 
 export const getBoard = createAction(FETCH_BOARD_REQUEST, option => option);
+export const getBoardInfo = createAction(FETCH_BOARD_INFO_REQUEST, id => id);
 export const updateBoard = createAction(UPDATE_BOARD_REQUEST, article => article);
 export const editBoardField = createAction(EDIT_BOARD_FIELD_REQUEST, (key, value) => ({key, value}));
 export const updateFavorite = createAction(UPDATE_FAVORITE, id => ({ id }));
@@ -34,6 +39,26 @@ function* getBoardSaga(action) {
             payload: { articles: [], total: 0 },
             error: true
         })
+    }
+}
+
+function* getBoardInfoSaga(action) {
+    try {
+        const article = yield call(api.getBoardInfo, action.payload.id);
+
+        if (!article) {
+            throw Error();
+        }
+
+        yield put({
+            type: FETCH_BOARD_INFO_SUCCESS,
+            payload: { article }
+        })  
+    } catch (e) {
+        alert('존재하지 게시글입니다.');
+        yield put({
+            type: GO_TO_HOME
+        });
     }
 }
 
@@ -81,6 +106,7 @@ export function* boardSaga() {
     yield takeEvery(UPDATE_BOARD_REQUEST, updateBoardSaga);
     yield takeEvery(GO_TO_ARTICLE, goToArticleSaga);
     yield takeEvery(UPDATE_FAVORITE, updateFavoriteSaga);
+    yield takeEvery(FETCH_BOARD_INFO_REQUEST, getBoardInfoSaga);
 };
 
 const initialState = { 
@@ -119,6 +145,7 @@ const boardActions = handleActions(
             ...state.article,
             [action.payload.key]: action.payload.value
         }}),
+        [FETCH_BOARD_INFO_SUCCESS]: (state, action) => ({ ...state, ...action.payload })
     },
     initialState
 );

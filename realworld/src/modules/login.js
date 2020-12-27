@@ -15,7 +15,8 @@ const GO_TO_HOME = 'login/GO_TO_HOME';
 
 export { 
     LOGIN_SUCCESS,
-    LOGOUT_SUCCESS
+    LOGOUT_SUCCESS,
+    GO_TO_HOME
 } 
 
 export const login = createAction(LOGIN_REQUEST, (email, password) => ({ email, password }));

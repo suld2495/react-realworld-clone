@@ -56,7 +56,7 @@ export const addUser = async (userData) => {
     }
 };
 
-export const getBoard = async ({ page, all, followers }) => {
+export const getBoard = async ({ page, all, id, followers }) => {
     const data = await realworldPouch.getDocs(ARTICLE) || { _id: ARTICLE, articles: [] };
     let articles = data.articles.reverse();
     const total = articles.length;
@@ -73,6 +73,14 @@ export const getBoard = async ({ page, all, followers }) => {
         articles,
         total
     }
+}
+
+export const getBoardInfo = async (id) => {
+    const data = await realworldPouch.getDocs(ARTICLE) || { _id: ARTICLE, articles: [] };
+
+    return data.articles.find(article => {
+        return article.id === parseInt(id);
+    })
 }
 
 export const updateBoard = async (article) => {
