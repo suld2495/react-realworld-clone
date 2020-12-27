@@ -20,11 +20,14 @@ const UPDATE_FAVORITE = 'board/UPDATE_FAVORITE';
 
 const GO_TO_ARTICLE = 'board/GO_TO_ARTICLE';
 
+const BOARD_LOAD = 'board/BOARD_LOAD';
+
 export const getBoard = createAction(FETCH_BOARD_REQUEST, option => option);
 export const getBoardInfo = createAction(FETCH_BOARD_INFO_REQUEST, id => id);
 export const updateBoard = createAction(UPDATE_BOARD_REQUEST, article => article);
 export const editBoardField = createAction(EDIT_BOARD_FIELD_REQUEST, (key, value) => ({key, value}));
 export const updateFavorite = createAction(UPDATE_FAVORITE, id => ({ id }));
+export const boardLoad = createAction(BOARD_LOAD);
 
 function* getBoardSaga(action) {
     try {
@@ -117,7 +120,8 @@ const initialState = {
         title: '',
         desc: '',
         content: '',
-        tag: ''
+        tag: '',
+        author: {}
     }
 };
 
@@ -138,14 +142,25 @@ const boardActions = handleActions(
                 title: '',
                 desc: '',
                 content: '',
-                tag: ''
+                tag: '',
+                author: {}
             } 
         }),
         [EDIT_BOARD_FIELD_REQUEST]: (state, action) => ({ ...state, article: {
             ...state.article,
             [action.payload.key]: action.payload.value
         }}),
-        [FETCH_BOARD_INFO_SUCCESS]: (state, action) => ({ ...state, ...action.payload })
+        [FETCH_BOARD_INFO_SUCCESS]: (state, action) => ({ ...state, ...action.payload }),
+        [BOARD_LOAD]: state => ({ 
+            ...state,  
+            article: {
+                title: '',
+                desc: '',
+                content: '',
+                tag: '',
+                author: {}
+            }
+        })
     },
     initialState
 );

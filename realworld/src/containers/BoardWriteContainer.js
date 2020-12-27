@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import BoardWrite from '../pages/BoardWrite';
-import { updateBoard, editBoardField } from '../modules/board';
+import { updateBoard, editBoardField, boardLoad } from '../modules/board';
 
-const BoardWriteContainer = ({ article, updateBoard, editBoardField }) => {
+const BoardWriteContainer = ({ article, updateBoard, editBoardField, boardLoad }) => {
+    useEffect(() => {
+        boardLoad();
+    }, []);
+        
     return (
         <BoardWrite 
             article={article} 
@@ -19,6 +23,7 @@ export default connect(
     }),
     {
         updateBoard,
-        editBoardField
+        editBoardField,
+        boardLoad
     }
 )(BoardWriteContainer);
