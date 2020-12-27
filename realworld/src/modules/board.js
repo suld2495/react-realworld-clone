@@ -117,7 +117,8 @@ const initialState = {
         title: '',
         desc: '',
         content: '',
-        tag: ''
+        tag: '',
+        author: {}
     }
 };
 
@@ -138,7 +139,8 @@ const boardActions = handleActions(
                 title: '',
                 desc: '',
                 content: '',
-                tag: ''
+                tag: '',
+                author: {}
             } 
         }),
         [EDIT_BOARD_FIELD_REQUEST]: (state, action) => ({ ...state, article: {
