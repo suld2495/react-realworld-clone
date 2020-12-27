@@ -14,6 +14,7 @@ import { logout } from './modules/login';
 import api from './api/api';
 import { appLoad } from './modules/app';
 import ArticleContainer from './containers/ArticleContainer';
+import MypageContainer from './containers/MypageContainer';
 
 function App({ isLogin, logout, appLoad, user }) {
     useEffect(() => {
@@ -35,6 +36,7 @@ function App({ isLogin, logout, appLoad, user }) {
                 <Route path = "/join" component={ Join }/> 
                 <Route path = "/write" component={ BoardWriteContainer }/> 
                 <Route path = "/article/:id" component={ ArticleContainer }/> 
+                <Route path = "/mypage/:id" component={ MypageContainer }/> 
             </Switch > 
         </>
     );

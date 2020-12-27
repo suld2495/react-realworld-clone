@@ -87,7 +87,7 @@ const Board = ({ article, user, updateFavorite }) => {
                 <div className="profile">
                     <div><img src={article.author.image} alt="" /></div>
                     <div className="info">
-                        <Link className="username" to="/">{article.author.username}</Link>
+                        <Link className="username" to={`/mypage/${article.author.email}`}>{article.author.username}</Link>
                         <p className="created">{article.createdAt}</p>
                     </div>
                 </div>
