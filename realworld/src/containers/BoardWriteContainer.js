@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import BoardWrite from '../pages/BoardWrite';
 import { updateBoard, editBoardField, boardLoad } from '../modules/board';
 
-const BoardWriteContainer = ({ article, updateBoard, editBoardField, boardLoad }) => {
+const BoardWriteContainer = ({ match, article, updateBoard, editBoardField, boardLoad }) => {
     useEffect(() => {
-        boardLoad();
+        boardLoad(match.params.id);
     }, []);
         
     return (
-        <BoardWrite 
+        <BoardWrite
             article={article} 
             updateBoard={updateBoard} 
             editBoardField={editBoardField}
