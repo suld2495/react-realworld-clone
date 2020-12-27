@@ -49,7 +49,7 @@ const BoardWrite = ({ article, updateBoard, editBoardField }) => {
         e.preventDefault();
 
         for (const key in article) {
-            if (key !== 'tag' && !article[key] ) {
+            if (article[key] === 'title' || article[key] === 'desc' || article[key] === 'content' ) {
                 alert(message[key]);
                 return false;
             }

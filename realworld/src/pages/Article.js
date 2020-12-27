@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import Smiley from '../assets/images/smiley-cyrus.jpg';
 
 const ArticleStyled = styled.div`
     .banner {
@@ -79,12 +80,36 @@ const ArticleStyled = styled.div`
         font-size: 14px;
         height: 18px;
     }
+    .edit {
+        display: flex;
+        align-items: center;
+    }
+    .edit span, .edit a {
+        padding: 5px;
+        display: inline-block;
+        font-size: 13px;
+        margin-right: 5px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+    .edit .edit-article {
+        border: 1px solid #9c9c9c;
+        color: #9c9c9c;
+    }
+    .edit .delete-article {
+        border: 1px solid #b72525;
+        color: #b72525;
+    }
 `;
 
-const Article = ({ id, article, getBoardInfo }) => {
+const Article = ({ id, user, article, getBoardInfo, deleteBoard }) => {
     useEffect(() => {
         getBoardInfo({ id });
     }, []);
+
+    const deleteArticle = () => {
+        deleteBoard(id);
+    }
 
     return (
         <ArticleStyled>
@@ -92,11 +117,19 @@ const Article = ({ id, article, getBoardInfo }) => {
                 <div>
                     <h1>{ article.title }</h1>
                     <div className="profile">
-                        <div><img src={article.author.image} alt="" /></div>
+                        <div><img src={article.author.image || Smiley} alt="" /></div>
                         <div className="info">
                             <Link className="username" to="/">{article.author.username}</Link>
                             <p className="created">{article.createdAt}</p>
                         </div>
+                        {
+                            user.email === article.author.email ? 
+                                <div className="edit">
+                                    <Link to={`/write/${article.id}`} className="edit-article">Edit Article</Link>
+                                    <span onClick={deleteArticle} className="delete-article">Delete Article</span>
+                                </div> :
+                                ''
+                        }
                     </div>
                 </div>
             </div>

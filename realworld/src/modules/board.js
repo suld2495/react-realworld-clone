@@ -1,4 +1,4 @@
-import { createAction, createActions, handleActions } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import { call, put, takeEvery, getContext, select } from 'redux-saga/effects'
 import * as api from '../api/api';
 import { GO_TO_HOME } from './login';
@@ -21,17 +21,21 @@ const UPDATE_FAVORITE = 'board/UPDATE_FAVORITE';
 const GO_TO_ARTICLE = 'board/GO_TO_ARTICLE';
 
 const BOARD_LOAD = 'board/BOARD_LOAD';
+const BOARD_LOAD_SUCCESS = 'board/BOARD_LOAD_SUCCESS';
 
 const FETCH_USER_INFO_REQUEST = 'board/FETCH_USER_INFO_REQUEST';
 const FETCH_USER_INFO_SUCCESS = 'board/FETCH_USER_INFO_SUCCESS';
+
+const DELETE_BOARD = 'board/DELETE_BOARD';
 
 export const getBoard = createAction(FETCH_BOARD_REQUEST, option => option);
 export const getBoardInfo = createAction(FETCH_BOARD_INFO_REQUEST, id => id);
 export const updateBoard = createAction(UPDATE_BOARD_REQUEST, article => article);
 export const editBoardField = createAction(EDIT_BOARD_FIELD_REQUEST, (key, value) => ({key, value}));
 export const updateFavorite = createAction(UPDATE_FAVORITE, id => ({ id }));
-export const boardLoad = createAction(BOARD_LOAD);
+export const boardLoad = createAction(BOARD_LOAD, id => ({ id }));
 export const getUserInfo = createAction(FETCH_USER_INFO_REQUEST, email => ({ email }));
+export const deleteBoard = createAction(DELETE_BOARD, id => ({ id }));
 
 function* getBoardSaga(action) {
     try {
@@ -123,6 +127,43 @@ function* getUserInfoSaga(action) {
     }
 }
 
+function* getBoardLoadSaga(action) {
+    const id = action.payload.id;
+    if (id) {
+        const article = yield call(api.getBoardInfo, id);
+        yield put({
+            type: BOARD_LOAD_SUCCESS,
+            payload: { article }
+        })
+    } else {
+        yield put({
+            type: BOARD_LOAD_SUCCESS,
+            payload: {
+                article: {
+                    title: '',
+                    desc: '',
+                    content: '',
+                    tag: '',
+                    author: {}
+                },
+            }
+        })
+    }
+}
+
+function* deleteBoardSaga(action) {
+    try {
+        yield call(api.deleteBoard, action.payload.id);
+        alert('삭제 되었습니다.');
+    } catch(e) {
+        alert('잘못 된 접근입니다.');
+    }
+
+    yield put({
+        type: GO_TO_HOME
+    })
+}
+
 export function* boardSaga() {
     yield takeEvery(FETCH_BOARD_REQUEST, getBoardSaga);
     yield takeEvery(UPDATE_BOARD_REQUEST, updateBoardSaga);
@@ -130,6 +171,8 @@ export function* boardSaga() {
     yield takeEvery(UPDATE_FAVORITE, updateFavoriteSaga);
     yield takeEvery(FETCH_BOARD_INFO_REQUEST, getBoardInfoSaga);
     yield takeEvery(FETCH_USER_INFO_REQUEST, getUserInfoSaga);
+    yield takeEvery(BOARD_LOAD, getBoardLoadSaga);
+    yield takeEvery(DELETE_BOARD, deleteBoardSaga);
 };
 
 const initialState = { 
@@ -174,16 +217,7 @@ const boardActions = handleActions(
             [action.payload.key]: action.payload.value
         }}),
         [FETCH_BOARD_INFO_SUCCESS]: (state, action) => ({ ...state, ...action.payload }),
-        [BOARD_LOAD]: state => ({ 
-            ...state,  
-            article: {
-                title: '',
-                desc: '',
-                content: '',
-                tag: '',
-                author: {}
-            }
-        }),
+        [BOARD_LOAD_SUCCESS]: (state, action) => ({ ...state, article: action.payload.article }),
         [FETCH_USER_INFO_SUCCESS]: (state, action) => ({ ...state, user: action.payload.user })
     },
     initialState

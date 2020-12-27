@@ -89,11 +89,19 @@ export const getBoardInfo = async (id) => {
 
 export const updateBoard = async (article) => {
     let data = await realworldPouch.getDocs(ARTICLE) || { _id: ARTICLE, articles: [] };
+    let id = article.id;
     article = { ...article, ...initialArticle };
-    article.id = data.articles.length + 1;
-    article.createdAt = new Date();
 
-    data.articles = [ ...data.articles, article ];
+    if (id) {
+        let temp = data.articles.find(article => article.id === id);
+        for (const key in temp) {
+            temp[key] = article[key];
+        }
+    } else {
+        article.id = data.articles.length + 1;
+        article.createdAt = new Date();
+        data.articles = [ ...data.articles, article ];
+    }
 
     try {
         await realworldPouch.addData(data);
@@ -132,6 +140,19 @@ export const getUserInfo = async (email) => {
     const data = await realworldPouch.getDocs(user) || { _id: user, users: [] };
     return data.users.find((user) => user.email === email);
 }
+
+export const deleteBoard = async (id) => {
+    let data = await realworldPouch.getDocs(ARTICLE) || { _id: ARTICLE, articles: [] };
+    const board = await getBoardInfo(id);
+    const index = data.articles.indexOf(board);
+    data.articles.splice(index, 1);
+
+    try {
+        await realworldPouch.addData(data);
+    } catch (e) {
+        console.log(e);
+    }
+}   
 
 export default {
     setToken: _token => { token = _token; }
