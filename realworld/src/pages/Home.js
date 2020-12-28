@@ -53,9 +53,19 @@ const Home = ({ articles, total, user, getBoard, updateFavorite }) => {
 
     const onClick = (currentPage) => {
         setPage(currentPage);
-        getBoard({
-            page: currentPage
-        })
+
+        if (all) {
+            getBoard({
+                page: currentPage,
+                all: true,
+            });
+        } else {
+            getBoard({
+                page: currentPage,
+                all: false,
+                followers: user.followers
+            });
+        }
     }
 
     const getGlobalFeed = () => {
@@ -69,7 +79,8 @@ const Home = ({ articles, total, user, getBoard, updateFavorite }) => {
     const getYourFeed = () => {
         getBoard({
             page: 1,
-            all: false
+            all: false,
+            followers: user.followers
         });
         setAll(false);
     }

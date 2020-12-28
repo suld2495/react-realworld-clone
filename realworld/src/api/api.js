@@ -56,7 +56,7 @@ export const addUser = async (userData) => {
     }
 };
 
-export const getBoard = async ({ page, all, email, favorite, followers }) => {
+export const getBoard = async ({ page, all, email, favorite, followers = [] }) => {
     const data = await realworldPouch.getDocs(ARTICLE) || { _id: ARTICLE, articles: [] };
     let articles = data.articles.reverse();
     const total = articles.length;
@@ -67,7 +67,7 @@ export const getBoard = async ({ page, all, email, favorite, followers }) => {
         articles = articles.filter(article => article.author.email === email);
     } else if (!all) {
         articles = articles.filter(article => {
-            return true;
+            return followers.includes(article.author.email);
         });
     }
 
@@ -153,6 +153,31 @@ export const deleteBoard = async (id) => {
         console.log(e);
     }
 }   
+
+export const addFollower = async ({ userData, email }) => {
+    try {
+        const data = await realworldPouch.getDocs(user) || { _id: user, users: [] };
+        const userTemp = data.users.find((item) => item.email === userData.email);
+
+        if (userTemp) {
+            const index = !userTemp.followers ? -1 : userTemp.followers.indexOf(email);
+
+            if (index > -1) {
+                userTemp.followers.splice(index, 1);
+            } else {
+                userTemp.followers = userTemp.followers || [];
+                userTemp.followers.push(email);
+            }
+
+            
+                await realworldPouch.addData(data);
+                return { ...userTemp };
+            
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
 
 export default {
     setToken: _token => { token = _token; }
