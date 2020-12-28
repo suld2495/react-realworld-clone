@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Mypage from '../pages/Mypage';
 import { getBoard, updateFavorite, getUserInfo, optionLoad } from '../modules/board';
+import { addFollower } from '../modules/login';
 
-const MypageContainer = ({ match, articles, total, user, getBoard, updateFavorite, getUserInfo, mypageUser, optionLoad }) => {
+const MypageContainer = ({ match, articles, total, user, getBoard, updateFavorite, getUserInfo, mypageUser, optionLoad, addFollower }) => {
     useEffect(() => {
         optionLoad();
     }, []);
@@ -17,6 +18,7 @@ const MypageContainer = ({ match, articles, total, user, getBoard, updateFavorit
             updateFavorite={updateFavorite}
             getUserInfo={getUserInfo}
             mypageUser={mypageUser}
+            addFollower={addFollower}
         />
     )
 };
@@ -32,6 +34,7 @@ export default connect(
         getBoard,
         updateFavorite,
         getUserInfo,
-        optionLoad
+        optionLoad,
+        addFollower
     }
 )(MypageContainer);

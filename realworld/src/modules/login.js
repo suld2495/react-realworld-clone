@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { call, put, takeEvery, getContext } from 'redux-saga/effects'
+import { call, put, takeEvery, getContext, select } from 'redux-saga/effects'
 import * as api from '../api/api';
 
 const LOGIN_REQUEST = 'login/LOGIN_REQUEST';
@@ -8,6 +8,9 @@ const LOGIN_FAILURE = 'login/LOGIN_FAILURE';
 
 const LOGOUT_REQUEST = 'login/LOGOUT_REQUEST';
 const LOGOUT_SUCCESS = 'login/LOGOUT_SUCCESS';
+
+const ADD_FOLLOWER_REQUEST = 'login/ADD_FOLLOWER_REQUEST';
+const ADD_FOLLOWER_SUCCESS = 'login/ADD_FOLLOWER_SUCCESS';
 
 const LOGIN_LOAD = 'login/LOGIN_LOAD';
 
@@ -22,7 +25,7 @@ export {
 export const login = createAction(LOGIN_REQUEST, (email, password) => ({ email, password }));
 export const logout = createAction(LOGOUT_SUCCESS, (email, password) => ({ email, password }));
 export const loginLoad = createAction(LOGIN_LOAD);
-
+export const addFollower = createAction(ADD_FOLLOWER_REQUEST, (email) => ({ email }));
 
 function* getLoginSaga(action) {
     try {
@@ -63,10 +66,25 @@ function* goToHomeSaga() {
     history.push('/');
 }
 
+function* addFollowerSaga(action) {
+    try {
+        const userData = yield select(state => state.login.user);
+        const newUser = yield call(api.addFollower, { userData, email: action.payload.email });
+
+        yield put({
+            type: ADD_FOLLOWER_SUCCESS,
+            payload: { user: newUser }
+        })
+    } catch(e) {
+
+    }
+}
+
 export function* loginSaga() {
     yield takeEvery(LOGOUT_REQUEST, logoutSaga);
     yield takeEvery(LOGIN_REQUEST, getLoginSaga);
     yield takeEvery(GO_TO_HOME, goToHomeSaga);
+    yield takeEvery(ADD_FOLLOWER_REQUEST, addFollowerSaga);
 }
 
 const initialState = { isLogin: false, error: false, user: {} };
@@ -77,6 +95,7 @@ const loginActions = handleActions(
         [LOGIN_FAILURE]: (state, action) => ({ ...state, ...action.payload }),
         [LOGOUT_SUCCESS]: state => ({ ...state, isLogin: false }),
         [LOGIN_LOAD]: state => ({ ...state, error: false }),
+        [ADD_FOLLOWER_SUCCESS]: (state, action) => ({ ...state, user: action.payload.user })
     },
     initialState,
 )

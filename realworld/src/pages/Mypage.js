@@ -67,7 +67,7 @@ const MypageStyled = styled.div`
     }
 `;
 
-const Mypage = ({ articles, total, user, getBoard, updateFavorite, email, getUserInfo, mypageUser }) => {
+const Mypage = ({ articles, total, user, getBoard, updateFavorite, email, getUserInfo, mypageUser, addFollower }) => {
     const [tab, setTab] = useState('my');
     const [page, setPage] = useState(1);
 
@@ -111,6 +111,10 @@ const Mypage = ({ articles, total, user, getBoard, updateFavorite, email, getUse
         });
     }
     
+    const handleFollower = () => {
+        addFollower(mypageUser.email);
+    }
+
     return (
         <MypageStyled>
             <div className="banner">
@@ -121,7 +125,12 @@ const Mypage = ({ articles, total, user, getBoard, updateFavorite, email, getUse
                     <p>{mypageUser.username}</p>
                     {
                         user.email !== mypageUser.email ?
-                            <span>Follow {mypageUser.username}</span> :
+                            <span onClick={handleFollower}>
+                                {   
+                                    user.followers && user.followers.includes(mypageUser.email) ? 
+                                    `UnFollow ${mypageUser.username}` :
+                                    `Follow ${mypageUser.username}`
+                                }</span> :
                             ''
                     }
                     
