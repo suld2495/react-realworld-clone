@@ -28,6 +28,8 @@ const FETCH_USER_INFO_SUCCESS = 'board/FETCH_USER_INFO_SUCCESS';
 
 const DELETE_BOARD = 'board/DELETE_BOARD';
 
+const OPTION_LOAD = 'board/OPTION_LOAD';
+
 export const getBoard = createAction(FETCH_BOARD_REQUEST, option => option);
 export const getBoardInfo = createAction(FETCH_BOARD_INFO_REQUEST, id => id);
 export const updateBoard = createAction(UPDATE_BOARD_REQUEST, article => article);
@@ -36,6 +38,7 @@ export const updateFavorite = createAction(UPDATE_FAVORITE, id => ({ id }));
 export const boardLoad = createAction(BOARD_LOAD, id => ({ id }));
 export const getUserInfo = createAction(FETCH_USER_INFO_REQUEST, email => ({ email }));
 export const deleteBoard = createAction(DELETE_BOARD, id => ({ id }));
+export const optionLoad = createAction(OPTION_LOAD);
 
 function* getBoardSaga(action) {
     try {
@@ -218,7 +221,8 @@ const boardActions = handleActions(
         }}),
         [FETCH_BOARD_INFO_SUCCESS]: (state, action) => ({ ...state, ...action.payload }),
         [BOARD_LOAD_SUCCESS]: (state, action) => ({ ...state, article: action.payload.article }),
-        [FETCH_USER_INFO_SUCCESS]: (state, action) => ({ ...state, user: action.payload.user })
+        [FETCH_USER_INFO_SUCCESS]: (state, action) => ({ ...state, user: action.payload.user }),
+        [OPTION_LOAD]: state => ({ ...state, option: {} })
     },
     initialState
 );
