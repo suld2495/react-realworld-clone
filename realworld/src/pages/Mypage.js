@@ -68,31 +68,43 @@ const MypageStyled = styled.div`
 `;
 
 const Mypage = ({ articles, total, user, getBoard, updateFavorite, email, getUserInfo, mypageUser }) => {
+    const [tab, setTab] = useState('my');
     const [page, setPage] = useState(1);
+
     useEffect(() => {
         getBoard({
             page: 1,
             email
         });
         getUserInfo(email);
-    }, [user]);
+    }, []);
 
     const onClick = (currentPage) => {
         setPage(currentPage);
-        getBoard({
-            page: currentPage,
-            email
-        })
+
+        if (tab === 'my') {
+            getBoard({
+                page: currentPage,
+                email
+            })
+        } else {
+            getBoard({
+                page: currentPage,
+                favorite: email
+            })
+        }
     }
 
-    const getGlobalFeed = () => {
+    const getFavoriteFeed = () => {
+        setTab('favorite');
         getBoard({
             page: 1,
-            email
+            favorite: email
         });
     }
 
     const getYourFeed = () => {
+        setTab('my');
         getBoard({
             page: 1,
             email
@@ -117,7 +129,8 @@ const Mypage = ({ articles, total, user, getBoard, updateFavorite, email, getUse
             </div>
             <div className="tab">
                 <ul>
-                    <li className='active' onClick={getYourFeed}>My Articles</li>
+                    <li className={`${tab === 'my' ? 'active': ''}`} onClick={getYourFeed}>My Articles</li>
+                    <li className={`${tab === 'favorite' ? 'active': ''}`} onClick={getFavoriteFeed}>Favorited Article</li>
                 </ul>
             </div>
             <BoardList articles={articles} user={user} updateFavorite={updateFavorite}/>
