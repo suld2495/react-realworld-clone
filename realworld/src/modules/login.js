@@ -69,7 +69,7 @@ export function* loginSaga() {
     yield takeEvery(GO_TO_HOME, goToHomeSaga);
 }
 
-const initialState = { isLogin: false, error: false, user: null };
+const initialState = { isLogin: false, error: false, user: {} };
 
 const loginActions = handleActions(
     {

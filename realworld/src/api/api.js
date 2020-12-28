@@ -56,15 +56,15 @@ export const addUser = async (userData) => {
     }
 };
 
-export const getBoard = async ({ page, all, email, followers }) => {
+export const getBoard = async ({ page, all, email, favorite, followers }) => {
     const data = await realworldPouch.getDocs(ARTICLE) || { _id: ARTICLE, articles: [] };
     let articles = data.articles.reverse();
     const total = articles.length;
 
-    if (email) {
-        articles = articles.filter(article => {
-            return article.author.email === email;
-        });
+    if (favorite) {
+        articles = articles.filter(article => article.favorites.includes(favorite));
+    } else if (email) {
+        articles = articles.filter(article => article.author.email === email);
     } else if (!all) {
         articles = articles.filter(article => {
             return true;
