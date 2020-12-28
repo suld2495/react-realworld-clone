@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Home from '../pages/Home';
-import { getBoard, updateFavorite } from '../modules/board';
+import { getBoard, updateFavorite, optionLoad } from '../modules/board';
 
-const HomeContainer = ({ articles, total, user, getBoard, updateFavorite }) => {
+const HomeContainer = ({ articles, total, user, getBoard, updateFavorite, optionLoad }) => {
+    useEffect(() => {
+        optionLoad();
+    }, []);
     return (
         <Home 
             getBoard={getBoard}
@@ -23,6 +26,7 @@ export default connect(
     }),
     {
         getBoard,
-        updateFavorite
+        updateFavorite,
+        optionLoad
     }
 )(HomeContainer);

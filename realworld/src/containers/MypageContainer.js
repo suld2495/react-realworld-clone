@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import Mypage from '../pages/Mypage';
-import { getBoard, updateFavorite, getUserInfo } from '../modules/board';
+import { getBoard, updateFavorite, getUserInfo, optionLoad } from '../modules/board';
 
-const MypageContainer = ({ match, articles, total, user, getBoard, updateFavorite, getUserInfo, mypageUser }) => {
+const MypageContainer = ({ match, articles, total, user, getBoard, updateFavorite, getUserInfo, mypageUser, optionLoad }) => {
+    useEffect(() => {
+        optionLoad();
+    }, []);
     return (
         <Mypage
             email={match.params.email} 
@@ -28,6 +31,7 @@ export default connect(
     {
         getBoard,
         updateFavorite,
-        getUserInfo
+        getUserInfo,
+        optionLoad
     }
 )(MypageContainer);
